@@ -20,7 +20,7 @@ void print_offset(size_t position)
 void print_hex(char *buffer, size_t buffer_size, size_t line_width)
 {
     for (size_t j = 0; j < buffer_size; ++ j) {
-        printf ("%02x ", buffer[j]);
+        printf ("%02hhx ", buffer[j]);
         if (j == line_width / 2 - 1) {
             printf (" ");
         }
