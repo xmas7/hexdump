@@ -99,7 +99,7 @@ int read_print_file(const char *path)
         ssize_t count = read (fd, buffer, sizeof (buffer) / sizeof (buffer[0]));
         if (count == -1) {
             fprintf (stderr, "Couldn't read file: %s\n", strerror (errno));
-            break;
+            goto Close;
         }
 
         print_contents (buffer, count);
@@ -109,9 +109,10 @@ int read_print_file(const char *path)
         }
     }
 
-    close(fd);
-
     result = 0;
+
+Close:
+    close(fd);
 Return:
     return result;
 }
