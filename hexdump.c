@@ -66,7 +66,7 @@ void print_contents(char *buffer, size_t buffer_size, size_t offset)
           ? LINE_WIDTH_ELEMENTS
           : remaining_buffer_size;
         if (line_size == 0) {
-             break;
+            break;
         }
 
         print_offset (i * LINE_WIDTH_ELEMENTS + offset);
@@ -101,14 +101,14 @@ int read_print_file(const char *path)
     size_t offset = 0;
     while (remaining_file_size > 0) {
         size_t map_size =
-              remaining_file_size > PAGE_SIZE ? PAGE_SIZE : remaining_file_size;
+            remaining_file_size > PAGE_SIZE ? PAGE_SIZE : remaining_file_size;
         char *buffer = mmap (
-             NULL,
-             map_size,
-             PROT_READ,
-             MAP_PRIVATE | MAP_POPULATE,
-             fd,
-             offset);
+            NULL,
+            map_size,
+            PROT_READ,
+            MAP_PRIVATE | MAP_POPULATE,
+            fd,
+            offset);
         if (buffer == MAP_FAILED) {
             fprintf (stderr, "Couldn't read file: %s\n", strerror (errno));
             goto Close;
@@ -117,7 +117,7 @@ int read_print_file(const char *path)
         print_contents (buffer, map_size, offset);
 
         if (munmap (buffer, map_size)) {
-             fprintf (stderr, "Couldn't unmap buffer: %s\n", strerror (errno));
+            fprintf (stderr, "Couldn't unmap buffer: %s\n", strerror (errno));
         }
         remaining_file_size -= map_size;
         offset += map_size;
@@ -127,9 +127,9 @@ int read_print_file(const char *path)
 
     result = 0;
 
-Close:
+  Close:
     close(fd);
-Return:
+  Return:
     return result;
 }
 
