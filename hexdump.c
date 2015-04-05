@@ -93,7 +93,7 @@ int read_print_file(const char *path)
         fprintf (stderr, "Couldn't open file: %s\n", strerror (errno));
         goto Return;
     }
-    struct stat file_info = { };
+    struct stat file_info;
     fstat (fd, &file_info);
 
     size_t remaining_file_size = file_info.st_size;
