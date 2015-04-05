@@ -53,7 +53,7 @@ void print_chars(char *buffer, size_t buffer_size)
     }
 }
 
-void print_contents(char *buffer, size_t buffer_size)
+void print_contents(char *buffer, size_t buffer_size, size_t offset)
 {
     if (buffer_size == 0) {
         return;
@@ -67,8 +67,11 @@ void print_contents(char *buffer, size_t buffer_size)
             remaining_buffer_size > LINE_WIDTH_ELEMENTS
           ? LINE_WIDTH_ELEMENTS
           : remaining_buffer_size;
+        if (line_size == 0) {
+             break;
+        }
 
-        print_offset (i * LINE_WIDTH_ELEMENTS);
+        print_offset (i * LINE_WIDTH_ELEMENTS + offset);
 
         print_hex (
             &buffer[i * LINE_WIDTH_ELEMENTS],
@@ -82,8 +85,6 @@ void print_contents(char *buffer, size_t buffer_size)
         printf ("|\n");
         remaining_buffer_size -= line_size;
     }
-    print_offset (buffer_size);
-    printf ("\n");
 }
 
 int read_print_file(const char *path)
@@ -115,11 +116,13 @@ int read_print_file(const char *path)
             goto Close;
         }
 
-        print_contents (buffer, map_size);
+        print_contents (buffer, map_size, offset);
 
         remaining_file_size -= map_size;
         offset += map_size;
     }
+    print_offset (file_info.st_size);
+    printf ("\n");
 
     result = 0;
 
