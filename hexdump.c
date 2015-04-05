@@ -2,6 +2,7 @@
 
 #include <errno.h>
 
+#include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -93,20 +94,31 @@ int read_print_file(const char *path)
         fprintf (stderr, "Couldn't open file: %s\n", strerror (errno));
         goto Return;
     }
+    struct stat file_info = { };
+    fstat (fd, &file_info);
 
-    while (1) {
-        char buffer[BUFSIZ];
-        ssize_t count = read (fd, buffer, sizeof (buffer) / sizeof (buffer[0]));
-        if (count == -1) {
+    size_t remaining_file_size = file_info.st_size;
+    enum { PAGE_SIZE = 4096 };
+    size_t offset = 0;
+    while (remaining_file_size > 0) {
+        size_t map_size =
+              remaining_file_size > PAGE_SIZE ? PAGE_SIZE : remaining_file_size;
+        char *buffer = mmap (
+             NULL,
+             remaining_file_size,
+             PROT_READ,
+             MAP_PRIVATE,
+             fd,
+             offset);
+        if (buffer == MAP_FAILED) {
             fprintf (stderr, "Couldn't read file: %s\n", strerror (errno));
             goto Close;
         }
 
-        print_contents (buffer, count);
+        print_contents (buffer, map_size);
 
-        if (count < BUFSIZ) {
-            break;
-        }
+        remaining_file_size -= map_size;
+        offset += map_size;
     }
 
     result = 0;
