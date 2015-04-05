@@ -104,7 +104,7 @@ int read_print_file(const char *path)
               remaining_file_size > PAGE_SIZE ? PAGE_SIZE : remaining_file_size;
         char *buffer = mmap (
              NULL,
-             remaining_file_size,
+             map_size,
              PROT_READ,
              MAP_PRIVATE | MAP_POPULATE,
              fd,
