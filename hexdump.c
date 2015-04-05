@@ -116,6 +116,9 @@ int read_print_file(const char *path)
 
         print_contents (buffer, map_size, offset);
 
+        if (munmap (buffer, map_size)) {
+             fprintf (stderr, "Couldn't unmap buffer: %s\n", strerror (errno));
+        }
         remaining_file_size -= map_size;
         offset += map_size;
     }
