@@ -90,7 +90,7 @@ int read_print_file(const char *path)
     int result = 1;
     int fd = open(path, O_RDONLY);
     if (fd == -1) {
-        fprintf (stderr, "Couldn't open file: %s\n", strerror (errno));
+        perror ("Couldn't open file");
         goto Return;
     }
     struct stat file_info;
@@ -110,14 +110,14 @@ int read_print_file(const char *path)
             fd,
             offset);
         if (buffer == MAP_FAILED) {
-            fprintf (stderr, "Couldn't read file: %s\n", strerror (errno));
+            perror ("Couldn't read file");
             goto Close;
         }
 
         print_contents (buffer, map_size, offset);
 
         if (munmap (buffer, map_size)) {
-            fprintf (stderr, "Couldn't unmap buffer: %s\n", strerror (errno));
+            perror ("Couldn't unmap buffer");
         }
         remaining_file_size -= map_size;
         offset += map_size;
