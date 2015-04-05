@@ -99,7 +99,7 @@ int read_print_file(const char *path)
     fstat (fd, &file_info);
 
     size_t remaining_file_size = file_info.st_size;
-    enum { PAGE_SIZE = 4096 };
+    const size_t PAGE_SIZE = getpagesize();
     size_t offset = 0;
     while (remaining_file_size > 0) {
         size_t map_size =
