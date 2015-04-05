@@ -108,7 +108,7 @@ int read_print_file(const char *path)
              NULL,
              remaining_file_size,
              PROT_READ,
-             MAP_PRIVATE,
+             MAP_PRIVATE | MAP_POPULATE,
              fd,
              offset);
         if (buffer == MAP_FAILED) {
