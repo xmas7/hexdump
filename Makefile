@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Wextra -g -std=c99
+CFLAGS = -Wall -Wextra -g -std=gnu99
 
 ALL = hexdump
 
